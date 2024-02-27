@@ -14,16 +14,22 @@ class ProductItem extends StatelessWidget {
         title: Text(
           product.title,
           textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 11.1),
+          style: const TextStyle(
+            fontSize: 11.4,
+            fontFamily: 'Lato',
+            fontWeight: FontWeight.bold,
+          ),
         ),
         backgroundColor: const Color.fromARGB(208, 0, 0, 0),
         leading: IconButton(
           icon: const Icon(Icons.favorite),
           onPressed: () {},
+          color: Colors.redAccent,
         ),
         trailing: IconButton(
           icon: const Icon(Icons.shopping_cart),
           onPressed: () {},
+          color: Colors.yellowAccent.shade700,
         ),
       ),
       child: Image.network(
