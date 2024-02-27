@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shop_flutter_app/components/product_item.dart';
 import 'package:shop_flutter_app/models/product.dart';
+import 'package:shop_flutter_app/models/product_list.dart';
 
 class ProductsOverviewPage extends StatelessWidget {
-  List<Product> loadedProducts = Product.generateProducts();
-
-  ProductsOverviewPage({super.key});
+  const ProductsOverviewPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    ProductList productProvider = Provider.of<ProductList>(context);
+    List<Product> loadedProducts = productProvider.items;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Minha loja'),
