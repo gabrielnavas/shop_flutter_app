@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shop_flutter_app/models/product.dart';
 import 'package:shop_flutter_app/routes.dart';
 
 class ProductItem extends StatelessWidget {
-  final Product product;
-
-  const ProductItem({required this.product, super.key});
+  const ProductItem({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final Product product = Provider.of<Product>(context);
+
     // grid with rows and columns
     Widget grid = GridTile(
       footer: GridTileBar(
@@ -23,8 +24,11 @@ class ProductItem extends StatelessWidget {
         ),
         backgroundColor: const Color.fromARGB(208, 0, 0, 0),
         leading: IconButton(
-          icon: const Icon(Icons.favorite),
-          onPressed: () {},
+          icon:
+              Icon(product.isFavorite ? Icons.favorite : Icons.favorite_border),
+          onPressed: () {
+            product.toggleFavorite();
+          },
           color: Colors.redAccent,
         ),
         trailing: IconButton(
