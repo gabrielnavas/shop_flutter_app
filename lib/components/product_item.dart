@@ -8,10 +8,22 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Product product = Provider.of<Product>(context);
+    // not change UI (performatic)
+    final Product product = Provider.of<Product>(context, listen: false);
+
+    // always just render here
+    final Widget consumerIconButtonLike = Consumer<Product>(
+      builder: (context, value, child) => IconButton(
+        icon: Icon(product.isFavorite ? Icons.favorite : Icons.favorite_border),
+        onPressed: () {
+          product.toggleFavorite();
+        },
+        color: Colors.redAccent,
+      ),
+    );
 
     // grid with rows and columns
-    Widget grid = GridTile(
+    Widget gridTileProduct = GridTile(
       footer: GridTileBar(
         title: Text(
           product.title,
@@ -23,14 +35,7 @@ class ProductItem extends StatelessWidget {
           ),
         ),
         backgroundColor: const Color.fromARGB(208, 0, 0, 0),
-        leading: IconButton(
-          icon:
-              Icon(product.isFavorite ? Icons.favorite : Icons.favorite_border),
-          onPressed: () {
-            product.toggleFavorite();
-          },
-          color: Colors.redAccent,
-        ),
+        leading: consumerIconButtonLike,
         trailing: IconButton(
           icon: const Icon(Icons.shopping_cart),
           onPressed: () {},
@@ -52,7 +57,7 @@ class ProductItem extends StatelessWidget {
     // clip an element, on border this case
     Widget clipRRect = ClipRRect(
       borderRadius: BorderRadius.circular(10),
-      child: grid,
+      child: gridTileProduct,
     );
     return clipRRect;
   }
