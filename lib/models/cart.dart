@@ -25,8 +25,12 @@ class Cart with ChangeNotifier {
     return total;
   }
 
-  void remove(String productId) {
-    _items.remove(productId);
+  bool exist(Product product) {
+    return _items.containsKey(product.id);
+  }
+
+  void remove(Product product) {
+    _items.remove(product.id);
     notifyListeners();
   }
 

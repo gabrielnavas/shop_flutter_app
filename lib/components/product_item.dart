@@ -35,10 +35,17 @@ class ProductItem extends StatelessWidget {
           color: Colors.redAccent,
         ),
         trailing: IconButton(
-          icon: const Icon(Icons.shopping_cart),
+          icon: Icon(
+            cart.exist(product)
+                ? Icons.shopping_cart
+                : Icons.shopping_cart_outlined,
+          ),
           onPressed: () {
-            cart.add(product);
-            print(cart.itemsCount);
+            if (cart.exist(product)) {
+              cart.remove(product);
+            } else {
+              cart.add(product);
+            }
           },
           color: const Color.fromARGB(204, 255, 234, 0),
         ),
