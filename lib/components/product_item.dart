@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_flutter_app/models/cart.dart';
 import 'package:shop_flutter_app/models/product.dart';
 import 'package:shop_flutter_app/routes.dart';
 
@@ -10,6 +11,7 @@ class ProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     // not change UI (performatic)
     final Product product = Provider.of<Product>(context);
+    final Cart cart = Provider.of<Cart>(context);
 
     // grid with rows and columns
     Widget gridTileProduct = GridTile(
@@ -34,7 +36,10 @@ class ProductItem extends StatelessWidget {
         ),
         trailing: IconButton(
           icon: const Icon(Icons.shopping_cart),
-          onPressed: () {},
+          onPressed: () {
+            cart.add(product);
+            print(cart.itemsCount);
+          },
           color: const Color.fromARGB(204, 255, 234, 0),
         ),
       ),
