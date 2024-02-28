@@ -5,14 +5,27 @@ import 'package:shop_flutter_app/models/product.dart';
 import 'package:shop_flutter_app/models/product_list.dart';
 
 class ProductGrid extends StatelessWidget {
+  final bool showFavoriteOnly;
+
   const ProductGrid({
+    required this.showFavoriteOnly,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    ProductList productProvider = Provider.of<ProductList>(context);
-    List<Product> loadedProducts = productProvider.items;
+    final provider = Provider.of<ProductList>(context);
+    List<Product> loadedProducts =
+        showFavoriteOnly ? provider.favoriteItems : provider.items;
+
+    if (loadedProducts.isEmpty) {
+      return const Center(
+        child: Text(
+          'Nenhum produto listado',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        ),
+      );
+    }
 
     return GridView.builder(
       padding: const EdgeInsets.all(10),

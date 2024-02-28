@@ -9,18 +9,7 @@ class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // not change UI (performatic)
-    final Product product = Provider.of<Product>(context, listen: false);
-
-    // always just render here
-    final Widget consumerIconButtonLike = Consumer<Product>(
-      builder: (context, value, child) => IconButton(
-        icon: Icon(product.isFavorite ? Icons.favorite : Icons.favorite_border),
-        onPressed: () {
-          product.toggleFavorite();
-        },
-        color: Colors.redAccent,
-      ),
-    );
+    final Product product = Provider.of<Product>(context);
 
     // grid with rows and columns
     Widget gridTileProduct = GridTile(
@@ -35,7 +24,14 @@ class ProductItem extends StatelessWidget {
           ),
         ),
         backgroundColor: const Color.fromARGB(208, 0, 0, 0),
-        leading: consumerIconButtonLike,
+        leading: IconButton(
+          icon:
+              Icon(product.isFavorite ? Icons.favorite : Icons.favorite_border),
+          onPressed: () {
+            product.toggleFavorite();
+          },
+          color: Colors.redAccent,
+        ),
         trailing: IconButton(
           icon: const Icon(Icons.shopping_cart),
           onPressed: () {},
