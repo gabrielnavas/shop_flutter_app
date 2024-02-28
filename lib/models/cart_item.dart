@@ -6,6 +6,7 @@ class CartItem {
   final String productName;
   final int quantity;
   final double productPrice;
+  final String imageUrl;
 
   CartItem({
     required this.id,
@@ -13,6 +14,7 @@ class CartItem {
     required this.productName,
     required this.quantity,
     required this.productPrice,
+    required this.imageUrl,
   });
 
   static CartItem create(
@@ -20,6 +22,7 @@ class CartItem {
     String productName,
     int quantity,
     double productPrice,
+    String imageUrl,
   ) {
     return CartItem(
       id: const Uuid().v4(),
@@ -27,6 +30,7 @@ class CartItem {
       productName: productName,
       quantity: quantity,
       productPrice: productPrice,
+      imageUrl: imageUrl,
     );
   }
 }

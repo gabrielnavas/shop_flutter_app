@@ -42,7 +42,7 @@ class ProductItem extends StatelessWidget {
           ),
           onPressed: () {
             if (cart.exist(product)) {
-              cart.remove(product);
+              cart.remove(product.id);
             } else {
               cart.add(product);
             }
