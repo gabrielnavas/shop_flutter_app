@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_flutter_app/components/product_grid.dart';
 import 'package:shop_flutter_app/models/cart.dart';
+import 'package:shop_flutter_app/routes.dart';
 
 enum FavoriteOptions { favorite, all }
 
@@ -45,7 +46,9 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
           ),
           Consumer<Cart>(
             child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushNamed(Routes.cart);
+              },
               icon: const Icon(Icons.shopping_cart),
             ),
             builder: (context, cart, child) => Badge(
