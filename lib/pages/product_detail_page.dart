@@ -20,7 +20,7 @@ class ProductDetailPage extends StatelessWidget {
         ),
       ),
       body: Center(
-        child: Text(product.title),
+        child: Text(product.name),
       ),
     );
   }

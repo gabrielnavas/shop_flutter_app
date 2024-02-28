@@ -15,7 +15,7 @@ class ProductItem extends StatelessWidget {
     Widget gridTileProduct = GridTile(
       footer: GridTileBar(
         title: Text(
-          product.title,
+          product.name,
           textAlign: TextAlign.center,
           style: const TextStyle(
             fontSize: 11.4,
