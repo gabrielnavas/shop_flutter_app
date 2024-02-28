@@ -40,7 +40,11 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
                 _showFavoriteOnly = favoriteOptions == FavoriteOptions.favorite;
               });
             },
-          )
+          ),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.shopping_cart),
+          ),
         ],
       ),
       body: ProductGrid(
