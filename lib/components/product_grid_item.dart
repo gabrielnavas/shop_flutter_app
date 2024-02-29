@@ -4,8 +4,8 @@ import 'package:shop_flutter_app/models/cart.dart';
 import 'package:shop_flutter_app/models/product.dart';
 import 'package:shop_flutter_app/routes.dart';
 
-class ProductItem extends StatelessWidget {
-  const ProductItem({super.key});
+class ProductGridItem extends StatelessWidget {
+  const ProductGridItem({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +45,17 @@ class ProductItem extends StatelessWidget {
               cart.remove(product.id);
             } else {
               cart.add(product);
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: const Text('Produto adicionado!'),
+                  duration: const Duration(seconds: 2),
+                  action: SnackBarAction(
+                    label: 'Desfazer',
+                    onPressed: () => cart.remove(product.id),
+                  ),
+                ),
+              );
             }
           },
           color: const Color.fromARGB(204, 255, 234, 0),
