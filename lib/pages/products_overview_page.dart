@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_flutter_app/components/app_drawer.dart';
 import 'package:shop_flutter_app/components/product_grid.dart';
 import 'package:shop_flutter_app/models/cart.dart';
 import 'package:shop_flutter_app/routes.dart';
@@ -19,6 +20,7 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const AppDrawer(),
       appBar: AppBar(
         backgroundColor: Colors.blueAccent,
         foregroundColor: Colors.white,

@@ -37,12 +37,13 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           fontFamily: 'Lato',
         ),
+        initialRoute: Routes.home,
         routes: {
+          Routes.home: (_) => const ProductsOverviewPage(),
           Routes.productDetail: (_) => const ProductDetailPage(),
           Routes.cart: (_) => const CartPage(),
           Routes.order: (_) => const OrderPage(),
         },
-        home: const ProductsOverviewPage(),
       ),
     );
   }
