@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_flutter_app/components/app_drawer.dart';
+import 'package:shop_flutter_app/components/order_widget.dart';
+import 'package:shop_flutter_app/models/order.dart';
 import 'package:shop_flutter_app/models/order_list.dart';
 
 class OrderPage extends StatelessWidget {
@@ -9,6 +11,8 @@ class OrderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final OrderList orderList = Provider.of<OrderList>(context);
+    final List<Order> orders = orderList.items;
+
     return Scaffold(
       drawer: const AppDrawer(),
       appBar: AppBar(
@@ -19,14 +23,9 @@ class OrderPage extends StatelessWidget {
         backgroundColor: Colors.blueAccent,
         foregroundColor: Colors.white,
       ),
-      body: Column(
-        children: orderList.items
-            .map(
-              (e) => Text(
-                e.products.toString(),
-              ),
-            )
-            .toList(),
+      body: ListView.builder(
+        itemCount: orders.length,
+        itemBuilder: (context, index) => OrderWidget(orders[index]),
       ),
     );
   }
