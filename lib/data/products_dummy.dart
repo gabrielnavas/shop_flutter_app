@@ -34,7 +34,7 @@ final List<Product> productsDummy = List.generate(
     final Product product = Product(
       id: index.toString(),
       name: name,
-      description: faker.lorem.words(3).toString(),
+      description: faker.lorem.sentence(),
       price: faker.randomGenerator.decimal(scale: 2, min: 100.0) * 10,
       imageUrl: faker.image.image(random: true, keywords: [..._names]),
     );
