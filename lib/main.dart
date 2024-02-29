@@ -7,6 +7,7 @@ import 'package:shop_flutter_app/pages/cart_page.dart';
 import 'package:shop_flutter_app/pages/order_page.dart';
 import 'package:shop_flutter_app/pages/product_detail_page.dart';
 import 'package:shop_flutter_app/pages/products_overview_page.dart';
+import 'package:shop_flutter_app/pages/products_page.dart';
 import 'package:shop_flutter_app/routes.dart';
 
 void main() {
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
           Routes.productDetail: (_) => const ProductDetailPage(),
           Routes.cart: (_) => const CartPage(),
           Routes.order: (_) => const OrderPage(),
+          Routes.products: (_) => const ProducstPage(),
         },
       ),
     );
