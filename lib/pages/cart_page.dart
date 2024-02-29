@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:shop_flutter_app/components/cart_item_widget.dart';
 import 'package:shop_flutter_app/models/cart.dart';
 import 'package:shop_flutter_app/models/cart_item.dart';
+import 'package:shop_flutter_app/models/order_list.dart';
+import 'package:shop_flutter_app/routes.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
@@ -47,7 +49,12 @@ class CartPage extends StatelessWidget {
                   ),
                   const Spacer(),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Provider.of<OrderList>(context, listen: false)
+                          .addOrder(cart);
+                      cart.clear();
+                      Navigator.of(context).pushNamed(Routes.order);
+                    },
                     style: TextButton.styleFrom(
                       backgroundColor: Colors.white70,
                     ),
