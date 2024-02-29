@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shop_flutter_app/components/app_drawer.dart';
 import 'package:shop_flutter_app/components/product_item.dart';
 import 'package:shop_flutter_app/models/product_list.dart';
+import 'package:shop_flutter_app/routes.dart';
 
 class ProducstPage extends StatelessWidget {
   const ProducstPage({super.key});
@@ -15,6 +16,13 @@ class ProducstPage extends StatelessWidget {
       drawer: const AppDrawer(),
       appBar: AppBar(
         title: const Text('Gerenciar produtos'),
+        actions: [
+          IconButton(
+            onPressed: () =>
+                Navigator.of(context).pushNamed(Routes.productForm),
+            icon: const Icon(Icons.add),
+          )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8),

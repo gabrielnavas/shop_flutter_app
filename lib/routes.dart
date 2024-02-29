@@ -4,4 +4,5 @@ class Routes {
   static String cart = '/cart';
   static String order = '/order';
   static String products = '/products';
+  static String productForm = '/products-form';
 }

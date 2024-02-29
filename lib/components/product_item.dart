@@ -19,10 +19,12 @@ class ProductItem extends StatelessWidget {
             IconButton(
               onPressed: () => {},
               icon: const Icon(Icons.edit),
+              color: const Color.fromARGB(255, 209, 209, 17),
             ),
             IconButton(
               onPressed: () {},
               icon: const Icon(Icons.delete),
+              color: Colors.redAccent,
             ),
           ],
         ),
