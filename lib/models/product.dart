@@ -29,15 +29,31 @@ class Product with ChangeNotifier {
   }
 
   static String? validName(String name) {
+    name = name.trim();
     if (name.isEmpty) {
       return 'O nome está vazio.';
+    }
+    if (name.length < 2) {
+      return 'O nome deve ser maior que 2 caracteres.';
+    }
+    if (name.length > 30) {
+      return 'O nome deve ser menor que 30 caracteres.';
     }
     return null;
   }
 
   static String? validDescription(String description) {
+    description = description.trim();
     if (description.isEmpty) {
       return 'A descrição está vazia.';
+    }
+
+    if (description.length < 6) {
+      return 'A descrição deve ser maior que 6 caracteres.';
+    }
+
+    if (description.length > 120) {
+      return 'A descrição deve ser menor que 120 caracteres.';
     }
     return null;
   }
@@ -50,6 +66,7 @@ class Product with ChangeNotifier {
   }
 
   static String? validImageUrl(String imageUrl) {
+    imageUrl = imageUrl.trim();
     if (imageUrl.isEmpty) {
       return 'A url da imagem está vazia.';
     }

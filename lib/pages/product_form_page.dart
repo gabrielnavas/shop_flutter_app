@@ -91,7 +91,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                       const TextInputType.numberWithOptions(decimal: true),
                   validator: (value) {
                     try {
-                      double price = double.parse(value ?? '0');
+                      double price = double.parse(value?.trim() ?? '0');
                       return Product.validPrice(price);
                     } catch (ex) {
                       return 'Digite somente números';
