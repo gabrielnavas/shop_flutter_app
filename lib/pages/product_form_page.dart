@@ -35,7 +35,11 @@ class _ProductFormPageState extends State<ProductFormPage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    productToEdit = ModalRoute.of(context)?.settings.arguments as Product;
+    final Object? args = ModalRoute.of(context)?.settings.arguments;
+    if (args == null) {
+      return;
+    }
+    productToEdit = args as Product;
     if (productToEdit != null) {
       _imageUrlController.text = productToEdit!.imageUrl;
       _nameController.text = productToEdit!.name;
