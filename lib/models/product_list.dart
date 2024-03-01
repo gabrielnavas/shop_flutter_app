@@ -15,4 +15,12 @@ class ProductList with ChangeNotifier {
     _items.add(product);
     notifyListeners();
   }
+
+  void updateProduct(Product product) {
+    final int index = _items.indexWhere((element) => element.id == product.id);
+    if (index >= 0) {
+      _items[index] = product;
+      notifyListeners();
+    }
+  }
 }

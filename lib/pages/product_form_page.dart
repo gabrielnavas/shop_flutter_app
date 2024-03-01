@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_flutter_app/models/product.dart';
 import 'package:shop_flutter_app/models/product_list.dart';
-import 'package:shop_flutter_app/routes.dart';
 
 class ProductFormPage extends StatefulWidget {
   const ProductFormPage({super.key});
@@ -13,6 +12,10 @@ class ProductFormPage extends StatefulWidget {
 
 class _ProductFormPageState extends State<ProductFormPage> {
   final TextEditingController _imageUrlController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
+
   final _nameFocus = FocusNode();
   final _descriptionUrlFocus = FocusNode();
   final _priceUrlFocus = FocusNode();
@@ -20,12 +23,25 @@ class _ProductFormPageState extends State<ProductFormPage> {
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final Product product = Product.init();
+  Product? productToEdit;
 
   @override
   void initState() {
     super.initState();
     _imageUrlFocus.addListener(updateImage);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    productToEdit = ModalRoute.of(context)?.settings.arguments as Product;
+    if (productToEdit != null) {
+      _imageUrlController.text = productToEdit!.imageUrl;
+      _nameController.text = productToEdit!.name;
+      _descriptionController.text = productToEdit!.description;
+      _priceController.text = productToEdit!.price.toString();
+    }
   }
 
   @override
@@ -55,23 +71,32 @@ class _ProductFormPageState extends State<ProductFormPage> {
     return true;
   }
 
-  void _submitForm() {
+  void _submitForm(Product product) {
     if (!_verifyForm()) {
       return;
     }
 
-    Provider.of<ProductList>(context, listen: false).addProduct(product);
+    if (productToEdit == null) {
+      Provider.of<ProductList>(context, listen: false).addProduct(product);
+    } else {
+      product.id = productToEdit!.id;
+      Provider.of<ProductList>(context, listen: false).updateProduct(product);
+    }
+
     Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
+    final Product product = Product.init();
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Formulário de produto'),
+        title: Text(
+            productToEdit == null ? 'Adicionar produto' : 'Atualizar produto'),
         actions: [
           IconButton(
-            onPressed: () => _submitForm(),
+            onPressed: () => _submitForm(product),
             icon: const Icon(
               Icons.save,
               color: Colors.blueAccent,
@@ -87,6 +112,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
             children: [
               TextFormField(
                   decoration: const InputDecoration(label: Text('Nome')),
+                  controller: _nameController,
                   focusNode: _nameFocus,
                   textInputAction: TextInputAction.next,
                   autofocus: true,
@@ -99,6 +125,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                   }),
               TextFormField(
                   decoration: const InputDecoration(label: Text('Preço')),
+                  controller: _priceController,
                   focusNode: _priceUrlFocus,
                   textInputAction: TextInputAction.next,
                   keyboardType:
@@ -113,6 +140,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                   }),
               TextFormField(
                   decoration: const InputDecoration(label: Text('Descrição')),
+                  controller: _descriptionController,
                   focusNode: _descriptionUrlFocus,
                   keyboardType: TextInputType.multiline,
                   maxLines: 3,
@@ -134,7 +162,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                         keyboardType: TextInputType.url,
                         controller: _imageUrlController,
                         focusNode: _imageUrlFocus,
-                        onFieldSubmitted: (value) => _submitForm(),
+                        onFieldSubmitted: (value) => _submitForm(product),
                         validator: (value) =>
                             Product.validImageUrl(value ?? ''),
                         onChanged: (value) => _verifyForm(),
