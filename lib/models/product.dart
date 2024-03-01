@@ -70,6 +70,19 @@ class Product with ChangeNotifier {
     if (imageUrl.isEmpty) {
       return 'A url da imagem está vazia.';
     }
+
+    bool isValidUrl = Uri.tryParse(imageUrl)?.hasAbsolutePath ?? false;
+    if (!isValidUrl) {
+      return 'Url inválida';
+    }
+
+    final List<String> imageFormats = ['.jpg', '.jpeg', 'png'];
+    final bool urlValid =
+        imageFormats.where((element) => imageUrl.contains(element)).isEmpty;
+    if (urlValid) {
+      return 'Url inválida';
+    }
+
     return null;
   }
 

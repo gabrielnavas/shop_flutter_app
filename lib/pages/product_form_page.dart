@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shop_flutter_app/models/product.dart';
+import 'package:shop_flutter_app/models/product_list.dart';
+import 'package:shop_flutter_app/routes.dart';
 
 class ProductFormPage extends StatefulWidget {
   const ProductFormPage({super.key});
@@ -42,13 +45,23 @@ class _ProductFormPageState extends State<ProductFormPage> {
     setState(() {});
   }
 
-  void _submitForm() {
+  bool _verifyForm() {
     final bool isValid = _formKey.currentState?.validate() ?? false;
     if (!isValid) {
-      return;
+      return false;
     }
 
     _formKey.currentState?.save();
+    return true;
+  }
+
+  void _submitForm() {
+    if (!_verifyForm()) {
+      return;
+    }
+
+    Provider.of<ProductList>(context, listen: false).addProduct(product);
+    Navigator.of(context).pop();
   }
 
   @override
@@ -78,6 +91,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                   textInputAction: TextInputAction.next,
                   autofocus: true,
                   validator: (value) => Product.validName(value ?? ''),
+                  onChanged: (value) => _verifyForm(),
                   onSaved: (name) {
                     if (name != null && name.isNotEmpty) {
                       product.name = name;
@@ -89,14 +103,9 @@ class _ProductFormPageState extends State<ProductFormPage> {
                   textInputAction: TextInputAction.next,
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
-                  validator: (value) {
-                    try {
-                      double price = double.parse(value?.trim() ?? '0');
-                      return Product.validPrice(price);
-                    } catch (ex) {
-                      return 'Digite somente números';
-                    }
-                  },
+                  onChanged: (value) => _verifyForm(),
+                  validator: (value) => Product.validPrice(
+                      double.tryParse(value?.trim() ?? '-1') ?? -1),
                   onSaved: (price) {
                     if (price != null && price.isNotEmpty) {
                       product.price = double.parse(price);
@@ -108,6 +117,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                   keyboardType: TextInputType.multiline,
                   maxLines: 3,
                   validator: (value) => Product.validDescription(value ?? ''),
+                  onChanged: (value) => _verifyForm(),
                   onSaved: (description) {
                     if (description != null && description.isNotEmpty) {
                       product.description = description;
@@ -127,6 +137,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                         onFieldSubmitted: (value) => _submitForm(),
                         validator: (value) =>
                             Product.validImageUrl(value ?? ''),
+                        onChanged: (value) => _verifyForm(),
                         onSaved: (imageUrl) {
                           if (imageUrl != null && imageUrl.isNotEmpty) {
                             product.imageUrl = imageUrl;
