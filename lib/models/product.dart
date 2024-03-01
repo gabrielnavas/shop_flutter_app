@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 class ValidateAttribute {
   final String attribute;
@@ -25,7 +26,12 @@ class Product with ChangeNotifier {
   });
 
   static Product init() {
-    return Product(id: '', name: '', description: '', price: 0.0, imageUrl: '');
+    return Product(
+        id: const Uuid().v4(),
+        name: '',
+        description: '',
+        price: 0.0,
+        imageUrl: '');
   }
 
   static String? validName(String name) {
