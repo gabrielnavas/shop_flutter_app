@@ -11,7 +11,11 @@ class OrderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final OrderList orderList = Provider.of<OrderList>(context);
-    final List<Order> orders = orderList.items;
+
+    ListView orders = ListView.builder(
+      itemCount: orderList.orderCount,
+      itemBuilder: (context, index) => OrderWidget(orderList.items[index]),
+    );
 
     return Scaffold(
       drawer: const AppDrawer(),
@@ -20,13 +24,22 @@ class OrderPage extends StatelessWidget {
           'Meus pedidos',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
+        centerTitle: true,
         backgroundColor: Colors.blueAccent,
         foregroundColor: Colors.white,
       ),
-      body: ListView.builder(
-        itemCount: orders.length,
-        itemBuilder: (context, index) => OrderWidget(orders[index]),
-      ),
+      body: orderList.orderCount > 0
+          ? orders
+          : const Center(
+              child: Text(
+                'Nenhum pedido foi feito ainda!',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 23,
+                  color: Colors.black54,
+                ),
+              ),
+            ),
     );
   }
 }

@@ -22,6 +22,7 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
     return Scaffold(
       drawer: const AppDrawer(),
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: Colors.blueAccent,
         foregroundColor: Colors.white,
         title: const Text(

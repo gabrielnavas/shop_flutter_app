@@ -11,13 +11,15 @@ class ProductDetailPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
         title: const Text(
           'Detalhes do produto',
           style: TextStyle(
             color: Colors.white,
           ),
         ),
+        centerTitle: true,
+        backgroundColor: Colors.blueAccent,
+        foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
         child: Column(

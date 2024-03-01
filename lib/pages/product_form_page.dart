@@ -96,6 +96,9 @@ class _ProductFormPageState extends State<ProductFormPage> {
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: Colors.blueAccent,
+        foregroundColor: Colors.white,
         title: Text(
             productToEdit == null ? 'Adicionar produto' : 'Atualizar produto'),
         actions: [
