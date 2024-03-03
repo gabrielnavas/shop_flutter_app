@@ -75,7 +75,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
     return true;
   }
 
-  void _submitForm(Product product) {
+  void _submitForm(Product product) async {
     if (!_verifyForm()) {
       return;
     }
@@ -84,14 +84,26 @@ class _ProductFormPageState extends State<ProductFormPage> {
         Provider.of<ProductList>(context, listen: false);
 
     if (productToEdit == null) {
-      productList.addProduct(product).then((value) =>
-          print(value ? 'Produto adicionado' : 'produto não adicionado'));
+      productList.addProduct(product).then((productAdded) {
+        if (productAdded) {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text('Produto adicionado!'),
+              duration: const Duration(seconds: 3),
+              action: SnackBarAction(
+                label: 'Desfazer',
+                onPressed: () => productList.removeProduct(product),
+              ),
+            ),
+          );
+          Navigator.of(context).pop();
+        }
+      });
     } else {
       product.id = productToEdit!.id;
       productList.updateProduct(product);
     }
-
-    Navigator.of(context).pop();
   }
 
   @override
