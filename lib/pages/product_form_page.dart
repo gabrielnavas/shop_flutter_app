@@ -80,11 +80,15 @@ class _ProductFormPageState extends State<ProductFormPage> {
       return;
     }
 
+    final ProductList productList =
+        Provider.of<ProductList>(context, listen: false);
+
     if (productToEdit == null) {
-      Provider.of<ProductList>(context, listen: false).addProduct(product);
+      productList.addProduct(product).then((value) =>
+          print(value ? 'Produto adicionado' : 'produto não adicionado'));
     } else {
       product.id = productToEdit!.id;
-      Provider.of<ProductList>(context, listen: false).updateProduct(product);
+      productList.updateProduct(product);
     }
 
     Navigator.of(context).pop();
