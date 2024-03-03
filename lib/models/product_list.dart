@@ -19,20 +19,24 @@ class ProductList with ChangeNotifier {
 
   Future<bool> addProduct(Product product) async {
     // https://upload.wikimedia.org/wikipedia/pt/a/aa/Bart_Simpson_200px.png
-    final resp = await http.post(
-      Uri.parse('$_url/products.json'),
-      body: jsonEncode({
-        "id": product.id,
-        "name": product.name,
-        "description": product.description,
-        "isFavorite": product.isFavorite,
-        "price": product.price,
-        "imageUrl": product.imageUrl,
-      }),
-    );
-    _items.add(product);
-    notifyListeners();
-    return resp.statusCode == 200;
+    try {
+      final resp = await http.post(
+        Uri.parse('$_url/products.'),
+        body: jsonEncode({
+          "id": product.id,
+          "name": product.name,
+          "description": product.description,
+          "isFavorite": product.isFavorite,
+          "price": product.price,
+          "imageUrl": product.imageUrl,
+        }),
+      );
+      _items.add(product);
+      notifyListeners();
+      return resp.statusCode == 200;
+    } catch (ex) {
+      return false;
+    }
   }
 
   void updateProduct(Product product) {

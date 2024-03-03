@@ -104,6 +104,24 @@ class _ProductFormPageState extends State<ProductFormPage> {
             ),
           );
           Navigator.of(context).pop();
+        } else {
+          return showDialog<bool>(
+            context: context,
+            builder: (ctx) => AlertDialog(
+              title: const Text('Não foi possível realizar a transação.'),
+              content: const Text('Tente novamente mais tarde!'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(ctx).pop(false);
+                  },
+                  child: const Text(
+                    'Ok',
+                  ),
+                ),
+              ],
+            ),
+          );
         }
       });
     } else {
@@ -132,7 +150,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
             onPressed: () => _submitForm(product),
             icon: const Icon(
               Icons.save,
-              color: Colors.blueAccent,
+              color: Color.fromARGB(255, 255, 255, 255),
             ),
           )
         ],
