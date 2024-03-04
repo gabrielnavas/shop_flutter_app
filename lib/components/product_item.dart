@@ -25,16 +25,10 @@ class _ProductItemState extends State<ProductItem> {
         child: Row(
           children: [
             IconButton(
-              onPressed: () => Navigator.of(context)
-                  .pushNamed(
-                    Routes.productForm,
-                    arguments: widget.product,
-                  )
-                  .then(
-                    (product) => setState(() => setState(() {
-                          widget.product = product as Product;
-                        })),
-                  ),
+              onPressed: () => Navigator.of(context).pushNamed(
+                Routes.productForm,
+                arguments: widget.product,
+              ),
               icon: const Icon(Icons.edit),
               color: const Color.fromARGB(255, 209, 209, 17),
             ),
@@ -55,7 +49,20 @@ class _ProductItemState extends State<ProductItem> {
                       TextButton(
                         onPressed: () {
                           Provider.of<ProductList>(context, listen: false)
-                              .removeProduct(widget.product);
+                              .removeProduct(widget.product)
+                              .then((isDeleted) {
+                            if (!isDeleted) {
+                              ScaffoldMessenger.of(context)
+                                  .hideCurrentSnackBar();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                      'Não foi possível remover o produto, tente novamente mais tarde.'),
+                                  duration: Duration(seconds: 3),
+                                ),
+                              );
+                            }
+                          });
                           Navigator.of(ctx).pop();
                         },
                         child: const Text(

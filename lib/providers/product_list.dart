@@ -33,7 +33,8 @@ class ProductList with ChangeNotifier {
         }),
       );
       final body = jsonDecode(resp.body);
-      product.id = body['name'] as String;
+      String productIdFirebase = body['name'] as String;
+      product.id = productIdFirebase;
       _items.add(product);
       notifyListeners();
       return resp.statusCode == 200 ||
@@ -98,11 +99,32 @@ class ProductList with ChangeNotifier {
     return false;
   }
 
-  void removeProduct(Product product) {
+  Future<bool> removeProduct(Product product) async {
     final int index = _items.indexWhere((element) => element.id == product.id);
     if (index >= 0) {
       _items.removeAt(index);
+
+      final resp = await http.delete(
+        Uri.parse(
+          '$_url/${product.id}.json',
+        ),
+        body: jsonEncode({
+          "name": product.name,
+          "description": product.description,
+          "price": product.price,
+          "imageUrl": product.imageUrl,
+        }),
+      );
+
       notifyListeners();
+
+      if (resp.statusCode >= 400) {
+        addProduct(product);
+        return false;
+      }
+      return true;
     }
+
+    return false;
   }
 }

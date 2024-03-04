@@ -4,7 +4,6 @@ import 'package:shop_flutter_app/components/app_drawer.dart';
 import 'package:shop_flutter_app/components/center_message.dart';
 import 'package:shop_flutter_app/components/circular_progress_message.dart';
 import 'package:shop_flutter_app/components/product_item.dart';
-import 'package:shop_flutter_app/models/product.dart';
 import 'package:shop_flutter_app/providers/product_list.dart';
 import 'package:shop_flutter_app/routes.dart';
 
@@ -16,17 +15,16 @@ class ProductsManager extends StatefulWidget {
 }
 
 class _ProductsManagerState extends State<ProductsManager> {
-  List<Product> loadedProducts = [];
   bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
 
-    _loadProducts();
+    _loadProducts(context);
   }
 
-  void _loadProducts() {
+  void _loadProducts(BuildContext context) {
     final productListProvider =
         Provider.of<ProductList>(context, listen: false);
 
@@ -40,10 +38,6 @@ class _ProductsManagerState extends State<ProductsManager> {
             duration: Duration(seconds: 3),
           ),
         );
-      } else {
-        setState(() {
-          loadedProducts = productListProvider.items;
-        });
       }
       setState(() {
         _isLoading = false;
@@ -57,23 +51,26 @@ class _ProductsManagerState extends State<ProductsManager> {
 
   @override
   Widget build(BuildContext context) {
+    final productListProvider = Provider.of<ProductList>(context);
+
     Widget body = Center(
       child: CircularProgressMessage(
-          'Carregando os produtos, aguarde.', _loadProducts),
+          'Carregando os produtos, aguarde.', () => _loadProducts(context)),
     );
 
-    if (loadedProducts.isEmpty) {
-      body = CenterMessage('Nenhum produto listado', _loadProducts);
+    if (productListProvider.itemsCount == 0) {
+      body =
+          CenterMessage('Nenhum produto listado', () => _loadProducts(context));
     } else if (!_isLoading) {
       body = RefreshIndicator(
-        onRefresh: () async => _loadProducts,
+        onRefresh: () async => () => _loadProducts(context),
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: ListView.builder(
-            itemCount: loadedProducts.length,
+            itemCount: productListProvider.itemsCount,
             itemBuilder: (context, index) => Column(
               children: [
-                ProductItem(loadedProducts[index]),
+                ProductItem(productListProvider.items[index]),
                 const Divider(),
               ],
             ),
@@ -92,11 +89,7 @@ class _ProductsManagerState extends State<ProductsManager> {
         actions: [
           IconButton(
             onPressed: () =>
-                Navigator.of(context).pushNamed(Routes.productForm).then(
-                      (product) => setState(
-                        () => loadedProducts.add(product as Product),
-                      ),
-                    ),
+                Navigator.of(context).pushNamed(Routes.productForm),
             icon: const Icon(Icons.add),
           )
         ],
