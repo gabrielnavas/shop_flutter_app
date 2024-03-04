@@ -25,6 +25,16 @@ class Product with ChangeNotifier {
     this.isFavorite = false,
   });
 
+  Product clone() {
+    return Product(
+      id: id,
+      name: name,
+      description: description,
+      price: price,
+      imageUrl: imageUrl,
+    );
+  }
+
   static Product init() {
     return Product(
         id: const Uuid().v4(),

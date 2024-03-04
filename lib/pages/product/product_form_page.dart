@@ -90,8 +90,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
         Provider.of<ProductList>(context, listen: false);
 
     if (productToEdit == null) {
-      productList.addProduct(product).then((productAdded) {
-        if (productAdded) {
+      productList.addProduct(product).then((productIsAdded) {
+        if (productIsAdded) {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -125,8 +125,39 @@ class _ProductFormPageState extends State<ProductFormPage> {
         }
       });
     } else {
+      // the global product from this screen is empty
       product.id = productToEdit!.id;
-      productList.updateProduct(product);
+
+      productList.updateProduct(product).then((productIsAdded) {
+        if (productIsAdded) {
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Produto adicionado!'),
+              duration: Duration(seconds: 3),
+            ),
+          );
+          Navigator.of(context).pop(product);
+        } else {
+          return showDialog<bool>(
+            context: context,
+            builder: (ctx) => AlertDialog(
+              title: const Text('Não foi possível realizar a transação.'),
+              content: const Text('Tente novamente mais tarde!'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(ctx).pop(false);
+                  },
+                  child: const Text(
+                    'Ok',
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+      });
     }
 
     setState(() {

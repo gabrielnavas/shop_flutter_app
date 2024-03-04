@@ -4,26 +4,37 @@ import 'package:shop_flutter_app/models/product.dart';
 import 'package:shop_flutter_app/providers/product_list.dart';
 import 'package:shop_flutter_app/routes.dart';
 
-class ProductItem extends StatelessWidget {
-  final Product product;
-  const ProductItem(this.product, {super.key});
+class ProductItem extends StatefulWidget {
+  Product product;
+  ProductItem(this.product, {super.key});
 
+  @override
+  State<ProductItem> createState() => _ProductItemState();
+}
+
+class _ProductItemState extends State<ProductItem> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
       leading: CircleAvatar(
-        backgroundImage: NetworkImage(product.imageUrl),
+        backgroundImage: NetworkImage(widget.product.imageUrl),
       ),
-      title: Text(product.name),
+      title: Text(widget.product.name),
       trailing: SizedBox(
         width: 100,
         child: Row(
           children: [
             IconButton(
-              onPressed: () => Navigator.of(context).pushNamed(
-                Routes.productForm,
-                arguments: product,
-              ),
+              onPressed: () => Navigator.of(context)
+                  .pushNamed(
+                    Routes.productForm,
+                    arguments: widget.product,
+                  )
+                  .then(
+                    (product) => setState(() => setState(() {
+                          widget.product = product as Product;
+                        })),
+                  ),
               icon: const Icon(Icons.edit),
               color: const Color.fromARGB(255, 209, 209, 17),
             ),
@@ -44,7 +55,7 @@ class ProductItem extends StatelessWidget {
                       TextButton(
                         onPressed: () {
                           Provider.of<ProductList>(context, listen: false)
-                              .removeProduct(product);
+                              .removeProduct(widget.product);
                           Navigator.of(ctx).pop();
                         },
                         child: const Text(

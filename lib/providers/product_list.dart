@@ -6,7 +6,7 @@ import 'package:shop_flutter_app/models/product.dart';
 
 class ProductList with ChangeNotifier {
   final String _url =
-      "https://shop-flutter-app-ca225-default-rtdb.firebaseio.com/products.json";
+      "https://shop-flutter-app-ca225-default-rtdb.firebaseio.com/products";
 
   final List<Product> _items = [];
 
@@ -18,11 +18,13 @@ class ProductList with ChangeNotifier {
 
   Future<bool> addProduct(Product product) async {
     // https://upload.wikimedia.org/wikipedia/pt/a/aa/Bart_Simpson_200px.png
+    // https://upload.wikimedia.org/wikipedia/en/c/c2/Peter_Griffin.png
     try {
       final resp = await http.post(
-        Uri.parse(_url),
+        Uri.parse(
+          '$_url.json',
+        ),
         body: jsonEncode({
-          "id": product.id,
           "name": product.name,
           "description": product.description,
           "isFavorite": product.isFavorite,
@@ -30,6 +32,8 @@ class ProductList with ChangeNotifier {
           "imageUrl": product.imageUrl,
         }),
       );
+      final body = jsonDecode(resp.body);
+      product.id = body['name'] as String;
       _items.add(product);
       notifyListeners();
       return resp.statusCode == 200 ||
@@ -45,14 +49,16 @@ class ProductList with ChangeNotifier {
 
     try {
       final resp = await http.get(
-        Uri.parse(_url),
+        Uri.parse(
+          '$_url.json',
+        ),
       );
       dynamic body = jsonDecode(resp.body);
       if (body is Map<String, dynamic>) {
-        body.forEach((_, productData) {
+        body.forEach((productId, productData) {
           _items.add(
             Product(
-              id: productData['id'] as String,
+              id: productId,
               name: productData['name'] as String,
               description: productData['description'] as String,
               price: productData['price'] as double,
@@ -70,12 +76,26 @@ class ProductList with ChangeNotifier {
     }
   }
 
-  void updateProduct(Product product) {
+  Future<bool> updateProduct(Product product) async {
     final int index = _items.indexWhere((element) => element.id == product.id);
     if (index >= 0) {
+      await http.patch(
+        Uri.parse(
+          '$_url/${product.id}.json',
+        ),
+        body: jsonEncode({
+          "name": product.name,
+          "description": product.description,
+          "price": product.price,
+          "imageUrl": product.imageUrl,
+        }),
+      );
+
       _items[index] = product;
       notifyListeners();
+      return true;
     }
+    return false;
   }
 
   void removeProduct(Product product) {
