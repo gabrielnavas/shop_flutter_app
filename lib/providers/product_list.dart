@@ -41,6 +41,8 @@ class ProductList with ChangeNotifier {
   }
 
   Future<bool> loadProducts() async {
+    _items.clear();
+
     try {
       final resp = await http.get(
         Uri.parse(_url),
@@ -48,19 +50,15 @@ class ProductList with ChangeNotifier {
       dynamic body = jsonDecode(resp.body);
       if (body is Map<String, dynamic>) {
         body.forEach((_, productData) {
-          int indexFound = _items.indexWhere(
-              (element) => element.id == productData["id"] as String);
-          if (indexFound == -1) {
-            _items.add(
-              Product(
-                id: productData['id'] as String,
-                name: productData['name'] as String,
-                description: productData['description'] as String,
-                price: productData['price'] as double,
-                imageUrl: productData['imageUrl'] as String,
-              ),
-            );
-          }
+          _items.add(
+            Product(
+              id: productData['id'] as String,
+              name: productData['name'] as String,
+              description: productData['description'] as String,
+              price: productData['price'] as double,
+              imageUrl: productData['imageUrl'] as String,
+            ),
+          );
         });
       } else if (body == null) {
         // when the products is empty, firebase returns null on body

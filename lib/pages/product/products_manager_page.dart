@@ -87,15 +87,12 @@ class _ProductsManagerState extends State<ProductsManager> {
         foregroundColor: Colors.white,
         actions: [
           IconButton(
-            onPressed: () => Navigator.of(context)
-                .pushNamed(Routes.productForm)
-                .then((product) => {
-                      setState(() {
-                        if (product is Product) {
-                          loadedProducts.add(product);
-                        }
-                      })
-                    }),
+            onPressed: () =>
+                Navigator.of(context).pushNamed(Routes.productForm).then(
+                      (product) => setState(
+                        () => loadedProducts.add(product as Product),
+                      ),
+                    ),
             icon: const Icon(Icons.add),
           )
         ],

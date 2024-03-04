@@ -103,7 +103,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
               ),
             ),
           );
-          Navigator.of(context).pop();
+          Navigator.of(context).pop(product);
         } else {
           return showDialog<bool>(
             context: context,
