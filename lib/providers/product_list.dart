@@ -103,28 +103,28 @@ class ProductList with ChangeNotifier {
     final int index = _items.indexWhere((element) => element.id == product.id);
     if (index >= 0) {
       _items.removeAt(index);
-
-      final resp = await http.delete(
-        Uri.parse(
-          '$_url/${product.id}.json',
-        ),
-        body: jsonEncode({
-          "name": product.name,
-          "description": product.description,
-          "price": product.price,
-          "imageUrl": product.imageUrl,
-        }),
-      );
-
       notifyListeners();
-
-      if (resp.statusCode >= 400) {
-        addProduct(product);
-        return false;
-      }
-      return true;
+    } else {
+      return false;
     }
 
-    return false;
+    final resp = await http.delete(
+      Uri.parse(
+        '$_url/${product.id}.json',
+      ),
+      body: jsonEncode({
+        "name": product.name,
+        "description": product.description,
+        "price": product.price,
+        "imageUrl": product.imageUrl,
+      }),
+    );
+
+    if (resp.statusCode >= 400) {
+      addProduct(product);
+      notifyListeners();
+      return false;
+    }
+    return true;
   }
 }
