@@ -57,22 +57,26 @@ class _ProductsManagerState extends State<ProductsManager> {
 
   @override
   Widget build(BuildContext context) {
-    Widget body = const Center(
-      child: CircularProgressMessage('Carregando os produtos, aguarde.'),
+    Widget body = Center(
+      child: CircularProgressMessage(
+          'Carregando os produtos, aguarde.', _loadProducts),
     );
 
     if (loadedProducts.isEmpty) {
-      body = const CenterMessage('Nenhum produto listado');
+      body = CenterMessage('Nenhum produto listado', _loadProducts);
     } else if (!_isLoading) {
-      body = Padding(
-        padding: const EdgeInsets.all(8),
-        child: ListView.builder(
-          itemCount: loadedProducts.length,
-          itemBuilder: (context, index) => Column(
-            children: [
-              ProductItem(loadedProducts[index]),
-              const Divider(),
-            ],
+      body = RefreshIndicator(
+        onRefresh: () async => _loadProducts,
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: ListView.builder(
+            itemCount: loadedProducts.length,
+            itemBuilder: (context, index) => Column(
+              children: [
+                ProductItem(loadedProducts[index]),
+                const Divider(),
+              ],
+            ),
           ),
         ),
       );

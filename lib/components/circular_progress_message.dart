@@ -3,7 +3,8 @@ import 'package:shop_flutter_app/components/center_message.dart';
 
 class CircularProgressMessage extends StatelessWidget {
   final String message;
-  const CircularProgressMessage(this.message, {super.key});
+  final Function() onRefresh;
+  const CircularProgressMessage(this.message, this.onRefresh, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +13,7 @@ class CircularProgressMessage extends StatelessWidget {
       children: [
         Container(
           margin: const EdgeInsets.only(bottom: 50),
-          child: CenterMessage(message),
+          child: CenterMessage(message, onRefresh),
         ),
         const CircularProgressIndicator(),
       ],

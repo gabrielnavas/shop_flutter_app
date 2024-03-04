@@ -60,15 +60,19 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
 
   @override
   Widget build(BuildContext context) {
-    Widget body = const Center(
-      child: CircularProgressMessage('Carregando os produtos, aguarde.'),
+    Widget body = Center(
+      child: CircularProgressMessage(
+          'Carregando os produtos, aguarde.', _loadProducts),
     );
 
     if (products.isEmpty) {
-      body = const CenterMessage('Nenhum produto listado');
+      body = CenterMessage('Nenhum produto listado', _loadProducts);
     } else if (!_isLoading) {
-      body = ProductGrid(
-        products: products,
+      body = RefreshIndicator(
+        onRefresh: () async => _loadProducts(),
+        child: ProductGrid(
+          products: products,
+        ),
       );
     }
 
