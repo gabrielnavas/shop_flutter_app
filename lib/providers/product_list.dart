@@ -100,31 +100,36 @@ class ProductList with ChangeNotifier {
   }
 
   Future<bool> removeProduct(Product product) async {
-    final int index = _items.indexWhere((element) => element.id == product.id);
-    if (index >= 0) {
-      _items.removeAt(index);
-      notifyListeners();
-    } else {
-      return false;
-    }
+    try {
+      final int index =
+          _items.indexWhere((element) => element.id == product.id);
+      if (index >= 0) {
+        _items.removeAt(index);
+      } else {
+        return false;
+      }
 
-    final resp = await http.delete(
-      Uri.parse(
-        '$_url/${product.id}.json',
-      ),
-      body: jsonEncode({
-        "name": product.name,
-        "description": product.description,
-        "price": product.price,
-        "imageUrl": product.imageUrl,
-      }),
-    );
+      final resp = await http.delete(
+        Uri.parse(
+          '$_url/${product.id}.json',
+        ),
+        body: jsonEncode({
+          "name": product.name,
+          "description": product.description,
+          "price": product.price,
+          "imageUrl": product.imageUrl,
+        }),
+      );
 
-    if (resp.statusCode >= 400) {
-      addProduct(product);
-      notifyListeners();
+      if (resp.statusCode >= 400) {
+        addProduct(product);
+        return false;
+      }
+      return true;
+    } catch (ex) {
       return false;
+    } finally {
+      notifyListeners();
     }
-    return true;
   }
 }

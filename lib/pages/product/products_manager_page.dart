@@ -63,7 +63,7 @@ class _ProductsManagerState extends State<ProductsManager> {
           CenterMessage('Nenhum produto listado', () => _loadProducts(context));
     } else if (!_isLoading) {
       body = RefreshIndicator(
-        onRefresh: () async => () => _loadProducts(context),
+        onRefresh: () async => _loadProducts(context),
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: ListView.builder(

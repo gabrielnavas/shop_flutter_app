@@ -99,7 +99,18 @@ class _ProductFormPageState extends State<ProductFormPage> {
               duration: const Duration(seconds: 3),
               action: SnackBarAction(
                 label: 'Desfazer',
-                onPressed: () => productList.removeProduct(product),
+                onPressed: () =>
+                    productList.removeProduct(product).then((isDeleted) {
+                  if (!isDeleted) {
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Não foi possível desfazer essa ação.'),
+                        duration: Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                }),
               ),
             ),
           );
