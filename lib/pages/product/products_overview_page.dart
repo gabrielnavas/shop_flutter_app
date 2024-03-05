@@ -21,34 +21,27 @@ class ProductsOverviewPage extends StatefulWidget {
 class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
   bool _showFavoriteOnly = false;
   bool _isLoading = true;
-  List<Product> products = [];
 
   @override
   void initState() {
     super.initState();
 
-    _loadProducts();
+    _loadProducts(context);
   }
 
-  void _loadProducts() {
+  void _loadProducts(BuildContext context) {
     final provider = Provider.of<ProductList>(context, listen: false);
-    final msg = ScaffoldMessenger.of(context);
 
     provider.loadProducts().then((isLoaded) {
       if (!isLoaded) {
-        msg.hideCurrentSnackBar();
-        msg.showSnackBar(
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text(
                 'Não foi possível carregar os produtos. Tente novamente mais tarde!'),
             duration: Duration(seconds: 3),
           ),
         );
-      } else {
-        setState(() {
-          products =
-              _showFavoriteOnly ? provider.favoriteItems : provider.items;
-        });
       }
       setState(() {
         _isLoading = false;
@@ -62,18 +55,23 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
 
   @override
   Widget build(BuildContext context) {
+    final productProvider = Provider.of<ProductList>(context);
+
     Widget body = Center(
       child: CircularProgressMessage(
-          'Carregando os produtos, aguarde.', _loadProducts),
+          'Carregando os produtos, aguarde.', () => _loadProducts(context)),
     );
 
-    if (products.isEmpty) {
-      body = CenterMessage('Nenhum produto listado', _loadProducts);
+    if (productProvider.itemsCount == 0) {
+      body =
+          CenterMessage('Nenhum produto listado', () => _loadProducts(context));
     } else if (!_isLoading) {
       body = RefreshIndicator(
-        onRefresh: () async => _loadProducts(),
+        onRefresh: () async => _loadProducts(context),
         child: ProductGrid(
-          products: products,
+          products: _showFavoriteOnly
+              ? productProvider.favoriteItems
+              : productProvider.items,
         ),
       );
     }

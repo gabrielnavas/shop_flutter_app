@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_flutter_app/models/cart.dart';
 import 'package:shop_flutter_app/models/product.dart';
+import 'package:shop_flutter_app/providers/product_list.dart';
 import 'package:shop_flutter_app/routes.dart';
 
 class ProductGridItem extends StatelessWidget {
-  const ProductGridItem({super.key});
+  final Product product;
+
+  const ProductGridItem({required this.product, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +35,14 @@ class ProductGridItem extends StatelessWidget {
           icon:
               Icon(product.isFavorite ? Icons.favorite : Icons.favorite_border),
           onPressed: () {
-            product.toggleFavorite();
+            if (product.isFavorite) {
+              Provider.of<ProductList>(context, listen: false)
+                  .turnFavoriteProduct(product.id);
+            } else {
+              Provider.of<ProductList>(context, listen: false)
+                  .removeFavoriteProduct(product.id);
+            }
+            // product.toggleFavorite();
           },
           color: Colors.redAccent,
         ),
@@ -76,10 +86,9 @@ class ProductGridItem extends StatelessWidget {
     );
 
     // clip an element, on border this case
-    Widget clipRRect = ClipRRect(
+    return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: gridTileProduct,
     );
-    return clipRRect;
   }
 }

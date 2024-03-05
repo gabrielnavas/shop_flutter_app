@@ -56,25 +56,56 @@ class ProductList with ChangeNotifier {
         ),
       );
       dynamic body = jsonDecode(resp.body);
-      if (body is Map<String, dynamic>) {
-        body.forEach((productId, productData) {
-          _items.add(
-            Product(
-              id: productId,
-              name: productData['name'] as String,
-              description: productData['description'] as String,
-              price: productData['price'] as double,
-              imageUrl: productData['imageUrl'] as String,
-            ),
-          );
-        });
-      } else if (body == null) {
+      if (body == null) {
         // when the products is empty, firebase returns null on body
         return true;
       }
+
+      body.forEach((productId, productData) {
+        _items.add(
+          Product(
+            id: productId,
+            name: productData['name'] as String,
+            description: productData['description'] as String,
+            price: productData['price'] as double,
+            imageUrl: productData['imageUrl'] as String,
+            isFavorite: productData['isFavorite'] as bool,
+          ),
+        );
+      });
       return true;
     } catch (ex) {
       return false;
+    }
+  }
+
+  Future<void> removeFavoriteProduct(String productId) {
+    return _toggleFavorite(productId);
+  }
+
+  Future<void> turnFavoriteProduct(String productId) async {
+    return _toggleFavorite(productId);
+  }
+
+  Future<void> _toggleFavorite(String productId) async {
+    final int index = _items.indexWhere((element) => element.id == productId);
+    if (index >= 0) {
+      _items[index].isFavorite = !_items[index].isFavorite;
+      final resp = await http.patch(
+        Uri.parse(
+          '$_url/$productId.json',
+        ),
+        body: jsonEncode({
+          "isFavorite": _items[index].isFavorite,
+        }),
+      );
+      if (resp.statusCode >= 400) {
+        throw HttpException(
+          message: 'Não foi possível favoritar. Tente novamente mais tarde',
+          status: resp.statusCode,
+        );
+      }
+      notifyListeners();
     }
   }
 
