@@ -90,25 +90,27 @@ class _ProductFormPageState extends State<ProductFormPage> {
     final ProductList productList =
         Provider.of<ProductList>(context, listen: false);
 
+    final msg = ScaffoldMessenger.of(context);
+
     if (productToEdit == null) {
       productList.addProduct(product).then((productIsAdded) {
         if (productIsAdded) {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar(
+          msg.hideCurrentSnackBar();
+          msg.showSnackBar(
             SnackBar(
               content: const Text('Produto adicionado!'),
               duration: const Duration(seconds: 3),
               action: SnackBarAction(
                 label: 'Desfazer',
                 onPressed: () => productList.removeProduct(product).then((_) {
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  msg.hideCurrentSnackBar();
+                  msg.showSnackBar(const SnackBar(
                     content: Text('Não foi possível desfazer essa ação.'),
                     duration: Duration(seconds: 3),
                   ));
                 }).catchError((ex) {
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  msg.hideCurrentSnackBar();
+                  msg.showSnackBar(
                     SnackBar(
                       content: Text((ex as HttpException).message),
                       duration: const Duration(seconds: 3),
@@ -145,8 +147,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
 
       productList.updateProduct(product).then((productIsAdded) {
         if (productIsAdded) {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-          ScaffoldMessenger.of(context).showSnackBar(
+          msg.hideCurrentSnackBar();
+          msg.showSnackBar(
             const SnackBar(
               content: Text('Produto adicionado!'),
               duration: Duration(seconds: 3),

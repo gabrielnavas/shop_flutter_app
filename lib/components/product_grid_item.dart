@@ -13,6 +13,8 @@ class ProductGridItem extends StatelessWidget {
     final Product product = Provider.of<Product>(context);
     final Cart cart = Provider.of<Cart>(context);
 
+    final msg = ScaffoldMessenger.of(context);
+
     // grid with rows and columns
     Widget gridTileProduct = GridTile(
       footer: GridTileBar(
@@ -45,8 +47,8 @@ class ProductGridItem extends StatelessWidget {
               cart.remove(product.id);
             } else {
               cart.add(product);
-              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              ScaffoldMessenger.of(context).showSnackBar(
+              msg.hideCurrentSnackBar();
+              msg.showSnackBar(
                 SnackBar(
                   content: const Text('Produto adicionado!'),
                   duration: const Duration(seconds: 2),

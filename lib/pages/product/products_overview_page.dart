@@ -32,10 +32,12 @@ class _ProductsOverviewPageState extends State<ProductsOverviewPage> {
 
   void _loadProducts() {
     final provider = Provider.of<ProductList>(context, listen: false);
+    final msg = ScaffoldMessenger.of(context);
+
     provider.loadProducts().then((isLoaded) {
       if (!isLoaded) {
-        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(
+        msg.hideCurrentSnackBar();
+        msg.showSnackBar(
           const SnackBar(
             content: Text(
                 'Não foi possível carregar os produtos. Tente novamente mais tarde!'),

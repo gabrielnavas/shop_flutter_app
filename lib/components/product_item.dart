@@ -6,8 +6,8 @@ import 'package:shop_flutter_app/providers/product_list.dart';
 import 'package:shop_flutter_app/routes.dart';
 
 class ProductItem extends StatefulWidget {
-  Product product;
-  ProductItem(this.product, {super.key});
+  final Product product;
+  const ProductItem(this.product, {super.key});
 
   @override
   State<ProductItem> createState() => _ProductItemState();
@@ -16,6 +16,8 @@ class ProductItem extends StatefulWidget {
 class _ProductItemState extends State<ProductItem> {
   @override
   Widget build(BuildContext context) {
+    final msg = ScaffoldMessenger.of(context);
+
     return ListTile(
       leading: CircleAvatar(
         backgroundImage: NetworkImage(widget.product.imageUrl),
@@ -52,16 +54,16 @@ class _ProductItemState extends State<ProductItem> {
                           try {
                             Provider.of<ProductList>(context, listen: false)
                                 .removeProduct(widget.product);
-                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                            ScaffoldMessenger.of(context).showSnackBar(
+                            msg.hideCurrentSnackBar();
+                            msg.showSnackBar(
                               const SnackBar(
                                 content: Text('Produto removido!'),
                                 duration: Duration(seconds: 3),
                               ),
                             );
                           } on HttpException catch (ex) {
-                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                            ScaffoldMessenger.of(context).showSnackBar(
+                            msg.hideCurrentSnackBar();
+                            msg.showSnackBar(
                               SnackBar(
                                 content: Text(ex.message),
                                 duration: const Duration(seconds: 3),
