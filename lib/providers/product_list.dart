@@ -79,12 +79,22 @@ class ProductList with ChangeNotifier {
     }
   }
 
+  void _toggleFavorite(int index) {
+    _items[index].isFavorite = !_items[index].isFavorite;
+    notifyListeners();
+  }
+
   Future<void> toggleFavorite(String productId) async {
+    final int index = _items.indexWhere((element) => element.id == productId);
+    if (index == -1) {
+      throw HttpException(
+        message: 'Não foi possível favoritar. Tente novamente mais tarde',
+        status: 400,
+      );
+    }
     try {
-      final int index = _items.indexWhere((element) => element.id == productId);
       if (index >= 0) {
-        _items[index].isFavorite = !_items[index].isFavorite;
-        notifyListeners();
+        _toggleFavorite(index);
 
         final resp = await http.patch(
           Uri.parse(
@@ -95,8 +105,7 @@ class ProductList with ChangeNotifier {
           }),
         );
         if (resp.statusCode >= 400) {
-          _items[index].isFavorite = !_items[index].isFavorite;
-          notifyListeners();
+          _toggleFavorite(index);
           throw HttpException(
             message: 'Não foi possível favoritar. Tente novamente mais tarde',
             status: 400,
@@ -104,6 +113,7 @@ class ProductList with ChangeNotifier {
         }
       }
     } catch (ex) {
+      _toggleFavorite(index);
       rethrow;
     }
   }
