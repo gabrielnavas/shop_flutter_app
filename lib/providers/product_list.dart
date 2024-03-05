@@ -18,8 +18,10 @@ class ProductList with ChangeNotifier {
   int get itemsCount => _items.length;
 
   Future<bool> addProduct(Product product) async {
-    // https://upload.wikimedia.org/wikipedia/pt/a/aa/Bart_Simpson_200px.png
-    // https://upload.wikimedia.org/wikipedia/en/c/c2/Peter_Griffin.png
+    // https://i.natgeofe.com/n/4f5aaece-3300-41a4-b2a8-ed2708a0a27c/domestic-dog_thumb_square.jpg?w=136&h=136
+    // https://i.dell.com/is/image/DellContent/content/dam/images/products/electronics-and-accessories/dell/keyboards/kb700/kb700-kbm-02-gy.psd?fmt=pjpg&pscan=auto&scl=1&wid=4859&hei=2724&qlt=100,1&resMode=sharp2&size=4859,2724&chrss=full&imwidth=5000
+    // https://upload.wikimedia.org/wikipedia/commons/a/a4/2019_Toyota_Corolla_Icon_Tech_VVT-i_Hybrid_1.8.jpg
+    // https://www.oitomeia.com.br/wp-content/uploads/2023/06/PR-GTM-GOL-Laranjao.jpg
     try {
       final resp = await http.post(
         Uri.parse(

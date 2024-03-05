@@ -1,16 +1,43 @@
-# shop_flutter_app
+# Shop Flutter App
 
-A new Flutter project.
+- Small shop project with a Firebase backend.
+- With state manager and data persistence on Firebase.
 
-## Getting Started
+<br>
 
-This project is a starting point for a Flutter application.
+## Screens
 
-A few resources to get you started if this is your first Flutter project:
+### Product Overview
+![Product Overview](docs/screens/products_overview.png "Product Overview")
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Product Overview with favorite and cart added
+![Product Overview with favorite and cart added](docs/screens/product_overview_with_favorite_and_cart_added.png "Product Overview with favorite and cart added")
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Product Overview with favorite marked
+![Product Overview with favorite marked](docs/screens/favorite_filter.png "Product Overview with favorite marked")
+
+### Product Manager
+![Product Manager](docs/screens/product_manager.png "Product Manager")
+
+### Add Product
+![Add Product](docs/screens/add_product.png "Add Product")
+
+
+### Remove Product
+![Remove Product](docs/screens/remove_product_shield.png "Remove Product")
+
+
+### Update Product
+![Update Product](docs/screens/update_product.png "Update Product")
+
+### Orders
+![Orders](docs/screens/orders.png "Orders")
+
+
+### Drawer Menu
+![Drawer Menu](docs/screens/drawer.png "Drawer Menu")
+
+### Cart 
+![Cart](docs/screens/cart.png "Cart")
+
+
