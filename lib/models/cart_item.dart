@@ -50,4 +50,15 @@ class CartItem {
       "imageUrl": imageUrl,
     };
   }
+
+  static CartItem fromMap(Map<String, dynamic> cartItemMap) {
+    return CartItem(
+      id: cartItemMap["id"],
+      productId: cartItemMap["productId"] as String,
+      productName: cartItemMap["productName"] as String,
+      quantity: cartItemMap["quantity"] as int,
+      productPrice: cartItemMap["productPrice"] as double,
+      imageUrl: cartItemMap["imageUrl"] as String,
+    );
+  }
 }

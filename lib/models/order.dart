@@ -31,4 +31,24 @@ class Order {
   String toJson() {
     return jsonEncode(toMap());
   }
+
+  static Order fromMap({
+    String? orderId,
+    required Map<String, dynamic> orderData,
+  }) {
+    final List<dynamic> cartItemsList = orderData["cartItems"] is String
+        ? jsonDecode(orderData["cartItems"])
+        : orderData["cartItems"];
+
+    final List<CartItem> cartItems = [];
+    for (var element in cartItemsList) {
+      cartItems.add(CartItem.fromMap(element));
+    }
+
+    return Order(
+        id: orderId ?? orderData["id"],
+        total: orderData["total"] as double,
+        cartItems: cartItems,
+        date: DateTime.parse(orderData["date"]));
+  }
 }

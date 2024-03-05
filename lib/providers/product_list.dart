@@ -55,7 +55,7 @@ class ProductList with ChangeNotifier {
           '$_url.json',
         ),
       );
-      dynamic body = jsonDecode(resp.body);
+      final dynamic body = jsonDecode(resp.body);
       if (body == null) {
         // when the products is empty, firebase returns null on body
         return true;

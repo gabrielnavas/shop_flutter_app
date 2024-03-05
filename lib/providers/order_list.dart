@@ -63,4 +63,44 @@ class OrderList with ChangeNotifier {
       );
     }
   }
+
+  Future<void> loadOrders() async {
+    _items.clear();
+
+    try {
+      final resp = await http.get(
+        Uri.parse(
+          '$_url.json',
+        ),
+      );
+      if (resp.statusCode >= 400) {
+        throw HttpException(
+          message:
+              'Não foi possível carregar os pedidos. Tente novamente mais tarde.',
+          status: 400,
+        );
+      }
+
+      final dynamic body = jsonDecode(resp.body);
+      if (body == null) {
+        throw HttpException(
+          message:
+              'Não foi possível carregar os pedidos. Tente novamente mais tarde.',
+          status: 400,
+        );
+      }
+
+      body.forEach((orderId, orderData) {
+        _items.add(Order.fromMap(orderId: orderId, orderData: orderData));
+      });
+    } on HttpException catch (_) {
+      rethrow;
+    } catch (ex) {
+      throw HttpException(
+        message:
+            'Não foi possível carregar os pedidos. Tente novamente mais tarde.',
+        status: 400,
+      );
+    }
+  }
 }
