@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_flutter_app/exceptions/http_exception.dart';
 import 'package:shop_flutter_app/models/product.dart';
 import 'package:shop_flutter_app/providers/product_list.dart';
 import 'package:shop_flutter_app/routes.dart';
@@ -47,22 +48,26 @@ class _ProductItemState extends State<ProductItem> {
                         ),
                       ),
                       TextButton(
-                        onPressed: () {
-                          Provider.of<ProductList>(context, listen: false)
-                              .removeProduct(widget.product)
-                              .then((isDeleted) {
-                            if (!isDeleted) {
-                              ScaffoldMessenger.of(context)
-                                  .hideCurrentSnackBar();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                      'Não foi possível remover o produto, tente novamente mais tarde.'),
-                                  duration: Duration(seconds: 3),
-                                ),
-                              );
-                            }
-                          });
+                        onPressed: () async {
+                          try {
+                            Provider.of<ProductList>(context, listen: false)
+                                .removeProduct(widget.product);
+                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Produto removido!'),
+                                duration: Duration(seconds: 3),
+                              ),
+                            );
+                          } on HttpException catch (ex) {
+                            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(ex.message),
+                                duration: const Duration(seconds: 3),
+                              ),
+                            );
+                          }
                           Navigator.of(ctx).pop();
                         },
                         child: const Text(

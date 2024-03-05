@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shop_flutter_app/exceptions/http_exception.dart';
 import 'package:shop_flutter_app/models/product.dart';
 
 class ProductList with ChangeNotifier {
@@ -99,14 +100,15 @@ class ProductList with ChangeNotifier {
     return false;
   }
 
-  Future<bool> removeProduct(Product product) async {
+  Future<void> removeProduct(Product product) async {
     try {
       final int index =
           _items.indexWhere((element) => element.id == product.id);
       if (index >= 0) {
         _items.removeAt(index);
       } else {
-        return false;
+        throw HttpException(
+            message: 'Esse produto não existe mais', status: 404);
       }
 
       final resp = await http.delete(
@@ -123,11 +125,21 @@ class ProductList with ChangeNotifier {
 
       if (resp.statusCode >= 400) {
         addProduct(product);
-        return false;
+        if (resp.statusCode == 404) {
+          throw HttpException(
+              message: 'Esse produto não existe mais', status: 404);
+        } else {
+          throw HttpException(
+              message:
+                  'Erro ao tentar remover o produto. Tente novamente mais tarde.',
+              status: 404);
+        }
       }
-      return true;
     } catch (ex) {
-      return false;
+      throw HttpException(
+          message:
+              'Erro ao tentar remover o produto. Tente novamente mais tarde.',
+          status: 404);
     } finally {
       notifyListeners();
     }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_flutter_app/exceptions/http_exception.dart';
 import 'package:shop_flutter_app/models/product.dart';
 import 'package:shop_flutter_app/providers/product_list.dart';
 
@@ -99,17 +100,20 @@ class _ProductFormPageState extends State<ProductFormPage> {
               duration: const Duration(seconds: 3),
               action: SnackBarAction(
                 label: 'Desfazer',
-                onPressed: () =>
-                    productList.removeProduct(product).then((isDeleted) {
-                  if (!isDeleted) {
-                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Não foi possível desfazer essa ação.'),
-                        duration: Duration(seconds: 3),
-                      ),
-                    );
-                  }
+                onPressed: () => productList.removeProduct(product).then((_) {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text('Não foi possível desfazer essa ação.'),
+                    duration: Duration(seconds: 3),
+                  ));
+                }).catchError((ex) {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text((ex as HttpException).message),
+                      duration: const Duration(seconds: 3),
+                    ),
+                  );
                 }),
               ),
             ),
