@@ -79,48 +79,33 @@ class ProductList with ChangeNotifier {
     }
   }
 
-  Future<void> removeFavoriteProduct(String productId) async {
-    if (!await _toggleFavorite(productId)) {
-      throw HttpException(
-        message: 'Não foi possível favoritar. Tente novamente mais tarde',
-        status: 400,
-      );
-    }
-  }
-
-  Future<void> turnFavoriteProduct(String productId) async {
-    if (!await _toggleFavorite(productId)) {
-      throw HttpException(
-        message: 'Não foi possível favoritar. Tente novamente mais tarde',
-        status: 400,
-      );
-    }
-  }
-
-  Future<bool> _toggleFavorite(String productId) async {
-    final int index = _items.indexWhere((element) => element.id == productId);
-    if (index >= 0) {
-      _items[index].isFavorite = !_items[index].isFavorite;
-      notifyListeners();
-
-      final resp = await http.patch(
-        Uri.parse(
-          '$_url/$productId.json',
-        ),
-        body: jsonEncode({
-          "isFavorite": _items[index].isFavorite,
-        }),
-      );
-      if (resp.statusCode >= 400) {
+  Future<void> toggleFavorite(String productId) async {
+    try {
+      final int index = _items.indexWhere((element) => element.id == productId);
+      if (index >= 0) {
         _items[index].isFavorite = !_items[index].isFavorite;
         notifyListeners();
-        return false;
-      } else {
-        return true;
-      }
-    }
 
-    return false;
+        final resp = await http.patch(
+          Uri.parse(
+            '$_url/$productId.json',
+          ),
+          body: jsonEncode({
+            "isFavorite": _items[index].isFavorite,
+          }),
+        );
+        if (resp.statusCode >= 400) {
+          _items[index].isFavorite = !_items[index].isFavorite;
+          notifyListeners();
+          throw HttpException(
+            message: 'Não foi possível favoritar. Tente novamente mais tarde',
+            status: 400,
+          );
+        }
+      }
+    } catch (ex) {
+      rethrow;
+    }
   }
 
   Future<bool> updateProduct(Product product) async {
