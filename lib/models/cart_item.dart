@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:uuid/uuid.dart';
 
 class CartItem {
@@ -32,5 +34,20 @@ class CartItem {
       productPrice: productPrice,
       imageUrl: imageUrl,
     );
+  }
+
+  String toJson() {
+    return jsonEncode(toMap());
+  }
+
+  Map<String, Object> toMap() {
+    return {
+      "id": id,
+      "productId": productId,
+      "productName": productName,
+      "quantity": quantity,
+      "productPrice": productPrice,
+      "imageUrl": imageUrl,
+    };
   }
 }
