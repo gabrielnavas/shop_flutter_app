@@ -64,9 +64,13 @@ class CartItemWidget extends StatelessWidget {
       child: Card(
         margin: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
         child: ListTile(
-          leading: Image.network(
-            cartItem.imageUrl,
-            fit: BoxFit.cover,
+          leading: SizedBox(
+            width: 70,
+            height: 45,
+            child: Image.network(
+              cartItem.imageUrl,
+              fit: BoxFit.cover,
+            ),
           ),
           title: Text(cartItem.productName),
           subtitle: Row(
@@ -83,8 +87,8 @@ class CartItemWidget extends StatelessWidget {
               ),
               Text(
                 'R\$${(cartItem.productPrice * cartItem.quantity).toStringAsFixed(2)}',
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 12.5),
               ),
             ],
           ),
