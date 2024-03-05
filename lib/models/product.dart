@@ -92,7 +92,7 @@ class Product with ChangeNotifier {
       return 'Url inválida';
     }
 
-    final List<String> imageFormats = ['.jpg', '.jpeg', 'png'];
+    final List<String> imageFormats = ['jpg', 'jpeg', 'png'];
     final bool urlValid =
         imageFormats.where((element) => imageUrl.contains(element)).isEmpty;
     if (urlValid) {
