@@ -1,5 +1,11 @@
 # Shop Flutter App
 
+## Before all
+- Create a firebase project.
+- Add the URI to the const String api in the lib/constants/api.dart file.
+
+## specs
+
 - Small shop project with a Firebase backend.
 - With state manager and data persistence on Firebase.
 

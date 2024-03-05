@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shop_flutter_app/constants/api.dart';
 import 'package:shop_flutter_app/exceptions/http_exception.dart';
 import 'package:shop_flutter_app/models/product.dart';
 
 class ProductList with ChangeNotifier {
-  final String _url =
-      "https://shop-flutter-app-ca225-default-rtdb.firebaseio.com/products";
+  final String _url = "$api/products";
 
   final List<Product> _items = [];
 

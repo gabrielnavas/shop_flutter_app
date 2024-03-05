@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:shop_flutter_app/constants/api.dart';
 import 'package:shop_flutter_app/exceptions/http_exception.dart';
 import 'package:shop_flutter_app/models/cart.dart';
 import 'package:shop_flutter_app/models/order.dart';
@@ -9,8 +10,7 @@ import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 
 class OrderList with ChangeNotifier {
-  final String _url =
-      "https://shop-flutter-app-ca225-default-rtdb.firebaseio.com/orders";
+  final String _url = "$api/orders";
 
   final List<Order> _items = [];
 
