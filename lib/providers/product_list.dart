@@ -79,18 +79,30 @@ class ProductList with ChangeNotifier {
     }
   }
 
-  Future<void> removeFavoriteProduct(String productId) {
-    return _toggleFavorite(productId);
+  Future<void> removeFavoriteProduct(String productId) async {
+    if (!await _toggleFavorite(productId)) {
+      throw HttpException(
+        message: 'Não foi possível favoritar. Tente novamente mais tarde',
+        status: 400,
+      );
+    }
   }
 
   Future<void> turnFavoriteProduct(String productId) async {
-    return _toggleFavorite(productId);
+    if (!await _toggleFavorite(productId)) {
+      throw HttpException(
+        message: 'Não foi possível favoritar. Tente novamente mais tarde',
+        status: 400,
+      );
+    }
   }
 
-  Future<void> _toggleFavorite(String productId) async {
+  Future<bool> _toggleFavorite(String productId) async {
     final int index = _items.indexWhere((element) => element.id == productId);
     if (index >= 0) {
       _items[index].isFavorite = !_items[index].isFavorite;
+      notifyListeners();
+
       final resp = await http.patch(
         Uri.parse(
           '$_url/$productId.json',
@@ -100,13 +112,15 @@ class ProductList with ChangeNotifier {
         }),
       );
       if (resp.statusCode >= 400) {
-        throw HttpException(
-          message: 'Não foi possível favoritar. Tente novamente mais tarde',
-          status: resp.statusCode,
-        );
+        _items[index].isFavorite = !_items[index].isFavorite;
+        notifyListeners();
+        return false;
+      } else {
+        return true;
       }
-      notifyListeners();
     }
+
+    return false;
   }
 
   Future<bool> updateProduct(Product product) async {

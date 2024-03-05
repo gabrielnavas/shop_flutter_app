@@ -5,7 +5,6 @@ import 'package:shop_flutter_app/components/center_message.dart';
 import 'package:shop_flutter_app/components/circular_progress_message.dart';
 import 'package:shop_flutter_app/components/product_grid.dart';
 import 'package:shop_flutter_app/models/cart.dart';
-import 'package:shop_flutter_app/models/product.dart';
 import 'package:shop_flutter_app/providers/product_list.dart';
 import 'package:shop_flutter_app/routes.dart';
 

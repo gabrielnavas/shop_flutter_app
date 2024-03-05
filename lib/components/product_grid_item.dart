@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_flutter_app/exceptions/http_exception.dart';
 import 'package:shop_flutter_app/models/cart.dart';
 import 'package:shop_flutter_app/models/product.dart';
 import 'package:shop_flutter_app/providers/product_list.dart';
@@ -15,8 +16,6 @@ class ProductGridItem extends StatelessWidget {
     // not change UI (performatic)
     final Product product = Provider.of<Product>(context);
     final Cart cart = Provider.of<Cart>(context);
-
-    final msg = ScaffoldMessenger.of(context);
 
     // grid with rows and columns
     Widget gridTileProduct = GridTile(
@@ -34,13 +33,23 @@ class ProductGridItem extends StatelessWidget {
         leading: IconButton(
           icon:
               Icon(product.isFavorite ? Icons.favorite : Icons.favorite_border),
-          onPressed: () {
-            if (product.isFavorite) {
-              Provider.of<ProductList>(context, listen: false)
-                  .turnFavoriteProduct(product.id);
-            } else {
-              Provider.of<ProductList>(context, listen: false)
-                  .removeFavoriteProduct(product.id);
+          onPressed: () async {
+            try {
+              if (product.isFavorite) {
+                await Provider.of<ProductList>(context, listen: false)
+                    .turnFavoriteProduct(product.id);
+              } else {
+                await Provider.of<ProductList>(context, listen: false)
+                    .removeFavoriteProduct(product.id);
+              }
+            } on HttpException catch (ex) {
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(ex.message),
+                  duration: const Duration(seconds: 2),
+                ),
+              );
             }
             // product.toggleFavorite();
           },
@@ -57,8 +66,8 @@ class ProductGridItem extends StatelessWidget {
               cart.remove(product.id);
             } else {
               cart.add(product);
-              msg.hideCurrentSnackBar();
-              msg.showSnackBar(
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: const Text('Produto adicionado!'),
                   duration: const Duration(seconds: 2),
