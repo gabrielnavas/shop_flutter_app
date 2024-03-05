@@ -25,52 +25,45 @@ class _OrderPageState extends State<OrderPage> {
 
   @override
   Widget build(BuildContext context) {
-    AppBar appBar = AppBar(
-      title: const Text(
-        'Meus pedidos',
-        style: TextStyle(fontWeight: FontWeight.bold),
-      ),
-      centerTitle: true,
-      backgroundColor: Colors.blueAccent,
-      foregroundColor: Colors.white,
+    final OrderList orderList = Provider.of<OrderList>(context);
+
+    Widget body = CircularProgressMessage(
+      'Carregando pedidos. Aguarde!',
+      () => () async => _loadOrders(context),
     );
 
-    Widget body = FutureBuilder(
-      future: _loadOrders(context),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressMessage(
-            'Carregando pedidos. Aguarde!',
-            () => () async => _loadOrders(context),
-          );
-        }
-
-        return Consumer<OrderList>(builder: (context, orderList, _) {
-          if (orderList.orderCount == 0) {
-            return CenterMessage(
-              'Nenhum pedido foi feito ainda',
-              () async => _loadOrders(context),
-            );
-          }
-
-          return ListView.builder(
-            itemCount: orderList.orderCount,
-            itemBuilder: (context, index) =>
-                OrderWidget(orderList.items[index]),
-          );
-        });
-      },
-    );
+    if (orderList.orderCount == 0) {
+      body = CenterMessage(
+        'Nenhum pedido foi feito ainda',
+        () async => _loadOrders(context),
+      );
+    } else if (!_isLoading) {
+      body = RefreshIndicator(
+        onRefresh: () async => _loadOrders(context),
+        child: ListView.builder(
+          itemCount: orderList.orderCount,
+          itemBuilder: (context, index) => OrderWidget(orderList.items[index]),
+        ),
+      );
+    }
 
     return Scaffold(
       drawer: const AppDrawer(),
-      appBar: appBar,
+      appBar: AppBar(
+        title: const Text(
+          'Meus pedidos',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.blueAccent,
+        foregroundColor: Colors.white,
+      ),
       body: body,
     );
   }
 
-  Future<void> _loadOrders(BuildContext context) {
-    return Provider.of<OrderList>(context, listen: false)
+  void _loadOrders(BuildContext context) {
+    Provider.of<OrderList>(context, listen: false)
         .loadOrders()
         .then((_) => setState(() => _isLoading = false))
         .catchError((ex) {
